@@ -1,7 +1,7 @@
 class SuitcasesController < ApplicationController
-
+  before_action :set_passenger, except: :all_suitcases
   def index
-    @suitcases = Suitcase.all
+    @suitcases = @passenger.suitcases
   end
 
   def show
@@ -14,8 +14,9 @@ class SuitcasesController < ApplicationController
 
   def create
     @suitcase = Suitcase.new(suitcase_params)
+    @suitcase.passenger_id = @passenger.id
     if @suitcase.save
-      redirect_to suitcase_path(@suitcase)
+      redirect_to passenger_suitcase_path(@passenger, @suitcase)
     else
       render :new
     end
@@ -28,7 +29,7 @@ class SuitcasesController < ApplicationController
   def update
     @suitcase = Suitcase.find(params[:id])
     if @suitcase.update(suitcase_params)
-      redirect_to suitcase_path(@suitcase)
+      redirect_to passenger_suitcase_path(@passenger, @suitcase)
     else
       render :edit
     end
@@ -37,7 +38,11 @@ class SuitcasesController < ApplicationController
   def destroy
     @suitcase = Suitcase.find(params[:id])
     @suitcase.destroy
-    redirect_to suitcases_path
+    redirect_to passenger_suitcases_path
+  end
+
+  def all_suitcases
+    @suitcases = Suitcase.all
   end
 
   private
@@ -45,5 +50,10 @@ class SuitcasesController < ApplicationController
   def suitcase_params
     params.require(:suitcase).permit(:description)
   end
+
+  def set_passenger
+    @passenger = Passenger.find(params[:passenger_id])
+  end
+
 
 end

@@ -1,0 +1,18 @@
+<h1>Suitcases</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Suitcase</th>
+      <th>Passenger</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @suitcases.each do |suitcase| %>
+    <tr>
+      <td><%= link_to suitcase.description %></td>
+      <td><%= suitcase.passenger.name %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
